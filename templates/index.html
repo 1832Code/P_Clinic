@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid px-0">
+    <!-- Hero Section -->
+    <div class="hero-section bg-primary-gradient py-5">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6 text-center text-lg-start">
+                    <h1 class="display-4 fw-bold text-white mb-3">Simulador de Gestión Hospitalaria</h1>
+                    <p class="lead text-white-80 mb-4">Optimice el flujo de pacientes, recursos médicos y tiempos de espera con nuestra solución inteligente de simulación de colas.</p>
+                    <div class="d-flex gap-3 justify-content-center justify-content-lg-start">
+                        <a href="#" class="btn btn-light btn-lg px-4">Comenzar Simulación</a>
+                        <a href="#" class="btn btn-outline-light btn-lg px-4">Ver Tutorial</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2039/2039009.png" alt="Hospital" class="img-fluid" style="max-height: 350px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Funcionalidades Clave</h2>
+            <p class="text-muted">Descubra cómo nuestro simulador puede transformar su gestión hospitalaria</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-shadow">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-box bg-light-primary text-primary mb-4">
+                            <i class="fas fa-procedures fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold">Gestión de Pacientes</h4>
+                        <p class="text-muted">Registro, triaje y seguimiento completo de pacientes en tiempo real.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-shadow">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-box bg-light-success text-success mb-4">
+                            <i class="fas fa-user-md fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold">Asignación de Doctores</h4>
+                        <p class="text-muted">Distribución inteligente de profesionales según especialidad y disponibilidad.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-shadow">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-box bg-light-info text-info mb-4">
+                            <i class="fas fa-chart-line fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold">Análisis de Datos</h4>
+                        <p class="text-muted">Reportes y estadísticas para mejorar la eficiencia operativa.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="bg-light py-5">
+        <div class="container">
+            <div class="row g-4 text-center">
+                <div class="col-md-3">
+                    <div class="display-5 fw-bold text-primary">+85%</div>
+                    <p class="text-muted mb-0">Eficiencia mejorada</p>
+                </div>
+                <div class="col-md-3">
+                    <div class="display-5 fw-bold text-primary">-40%</div>
+                    <p class="text-muted mb-0">Tiempos de espera</p>
+                </div>
+                <div class="col-md-3">
+                    <div class="display-5 fw-bold text-primary">24/7</div>
+                    <p class="text-muted mb-0">Disponibilidad</p>
+                </div>
+                <div class="col-md-3">
+                    <div class="display-5 fw-bold text-primary">100%</div>
+                    <p class="text-muted mb-0">Satisfacción</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="bg-dark text-white py-5">
+        <div class="container text-center py-4">
+            <h2 class="fw-bold mb-4">¿Listo para optimizar su hospital?</h2>
+            <p class="lead mb-5">Nuestro simulador ha ayudado a más de 50 instituciones médicas a mejorar sus procesos.</p>
+            <a href="#" class="btn btn-primary btn-lg px-5">Solicitar Demo</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #0d6efd 0%, #084298 100%);
+    }
+    .icon-box {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .hover-shadow {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    .text-white-80 {
+        color: rgba(255,255,255,0.8);
+    }
+</style>
+{% endblock %}

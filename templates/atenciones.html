@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-slate-900">Atenciones</h2>
+<form method="post" class="row g-3 mb-4">
+  <div class="col-auto">
+    <select class="form-select" name="paciente_id" required>
+      <option value="">Seleccione paciente</option>
+      {% for id, nombre in pacientes.items() %}
+      <option value="{{ id }}">{{ nombre }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-auto">
+    <select class="form-select" name="doctor_id" required>
+      <option value="">Seleccione doctor</option>
+      {% for id, nombre in doctores.items() %}
+      <option value="{{ id }}">{{ nombre }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-auto">
+    <input type="number" class="form-control" name="tiempo_atencion" placeholder="Tiempo de atención" min="0" required>
+  </div>
+  <div class="col-auto">
+    <button type="submit" class="btn btn-success">Registrar Atención</button>
+  </div>
+</form>
+<table class="table table-striped mt-3">
+    <thead>
+        <tr><th>ID</th><th>Paciente</th><th>Doctor</th><th>Tiempo de Atención</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+        {% for atencion in atenciones %}
+        <tr>
+            <td>{{ atencion.id }}</td>
+            <td>{{ pacientes[atencion.paciente_id] if atencion.paciente_id in pacientes else 'Desconocido' }}</td>
+            <td>{{ doctores[atencion.doctor_id] if atencion.doctor_id in doctores else 'Desconocido' }}</td>
+            <td>{{ atencion.tiempo_atencion }}</td>
+            <td>
+                <!-- Botón Editar (abre modal) -->
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editarAtencionModal{{ atencion.id }}">Editar</button>
+                <!-- Modal Editar -->
+                <div class="modal fade" id="editarAtencionModal{{ atencion.id }}" tabindex="-1" aria-labelledby="editarAtencionLabel{{ atencion.id }}" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form method="post" action="/atenciones/editar/{{ atencion.id }}">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="editarAtencionLabel{{ atencion.id }}">Editar Atención</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <select class="form-select mb-2" name="nuevo_paciente_id" required>
+                            {% for id, nombre in pacientes.items() %}
+                            <option value="{{ id }}" {% if atencion.paciente_id == id %}selected{% endif %}>{{ nombre }}</option>
+                            {% endfor %}
+                          </select>
+                          <select class="form-select mb-2" name="nuevo_doctor_id" required>
+                            {% for id, nombre in doctores.items() %}
+                            <option value="{{ id }}" {% if atencion.doctor_id == id %}selected{% endif %}>{{ nombre }}</option>
+                            {% endfor %}
+                          </select>
+                          <input type="number" class="form-control mb-2" name="nuevo_tiempo_atencion" value="{{ atencion.tiempo_atencion }}" min="0" required>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <!-- Botón Eliminar (con confirmación) -->
+                <form method="post" action="/atenciones/eliminar/{{ atencion.id }}" style="display:inline-block;" onsubmit="return confirm('¿Seguro que desea eliminar esta atención?');">
+                  <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<style>
+    h2{
+        color: black;
+    }
+</style>
+{% endblock %} 

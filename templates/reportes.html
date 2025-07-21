@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Reportes y Estadísticas</h2>
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Total de Atenciones</h5>
+        <p class="display-5">{{ total_atenciones }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Tiempo de Espera Promedio</h5>
+        <p class="display-5">{{ tiempo_espera_prom }} <span class="fs-6">min</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6 mb-4">
+    <h5>Pacientes atendidos por área</h5>
+    <img src="{{ url_for('grafico_atendidos_por_area') }}" class="img-fluid border rounded">
+  </div>
+  <div class="col-md-6 mb-4">
+    <h5>Distribución de prioridades de pacientes</h5>
+    <img src="{{ url_for('grafico_prioridades') }}" class="img-fluid border rounded">
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6 mb-4">
+    <h5>Atenciones por doctor</h5>
+    <img src="{{ url_for('grafico_atenciones_por_doctor') }}" class="img-fluid border rounded">
+  </div>
+  <div class="col-md-6 mb-4">
+    <h5>Pacientes por estado de atención</h5>
+    <img src="{{ url_for('grafico_pacientes_estado') }}" class="img-fluid border rounded">
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6 mb-4">
+    <h5>Pacientes por área</h5>
+    <img src="{{ url_for('grafico_pacientes_por_area') }}" class="img-fluid border rounded">
+  </div>
+</div>
+
+<style>
+    h2{
+        color: black;
+    }
+</style>
+{% endblock %} 

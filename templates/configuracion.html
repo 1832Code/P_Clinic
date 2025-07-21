@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Configuración de Usuario</h2>
+<ul class="nav nav-tabs mb-3" id="configTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="perfil-tab" data-bs-toggle="tab" data-bs-target="#perfil" type="button" role="tab">Perfil</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password" type="button" role="tab">Cambiar contraseña</button>
+  </li>
+</ul>
+<div class="tab-content" id="configTabsContent">
+  <div class="tab-pane fade show active" id="perfil" role="tabpanel">
+    <form method="post">
+      <input type="hidden" name="actualizar_info" value="1">
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ session.usuario_nombre }}" required>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{ session.usuario_email }}" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Actualizar información</button>
+    </form>
+  </div>
+  <div class="tab-pane fade" id="password" role="tabpanel">
+    <form method="post">
+      <input type="hidden" name="cambiar_password" value="1">
+      <div class="mb-3">
+        <label for="nueva_password" class="form-label">Nueva contraseña</label>
+        <input type="password" class="form-control" id="nueva_password" name="nueva_password" required>
+      </div>
+      <button type="submit" class="btn btn-warning">Cambiar contraseña</button>
+    </form>
+  </div>
+</div>
+{% endblock %} 

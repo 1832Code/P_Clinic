@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-0 py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="h5 mb-0 fw-bold">
+                    <i class="bi bi-people-fill text-primary me-2"></i>Gestión de Doctores
+                </h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoDoctorModal">
+                    <i class="bi bi-plus-lg me-1"></i> Nuevo Doctor
+                </button>
+            </div>
+        </div>
+        
+        <div class="card-body">
+            <!-- Modal para agregar nuevo doctor -->
+            <div class="modal fade" id="nuevoDoctorModal" tabindex="-1" aria-labelledby="nuevoDoctorModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form method="post">
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title" id="nuevoDoctorModalLabel">
+                                    <i class="bi bi-person-plus me-1"></i> Registrar Nuevo Doctor
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="nombreDoctor" class="form-label">Nombre Completo</label>
+                                    <input type="text" class="form-control" id="nombreDoctor" name="nombre" placeholder="Ej: Dr. Juan Pérez" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="areaDoctor" class="form-label">Especialidad/Área</label>
+                                    <select class="form-select" id="areaDoctor" name="area_id" required>
+                                        <option value="">Seleccione una especialidad</option>
+                                        {% for id, nombre in areas.items() %}
+                                        <option value="{{ id }}">{{ nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Registrar Doctor</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de doctores -->
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="text-center" style="width: 10%;">ID</th>
+                            <th scope="col" style="width: 35%;">Nombre</th>
+                            <th scope="col" style="width: 35%;">Especialidad</th>
+                            <th scope="col" class="text-end" style="width: 20%;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doctor in doctores %}
+                        <tr>
+                            <td class="text-center text-muted fw-semibold">{{ doctor.id }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-sm bg-light-primary rounded-circle d-flex align-items-center justify-content-center me-2">
+                                        <i class="bi bi-person-fill text-primary"></i>
+                                    </div>
+                                    <span class="fw-medium">{{ doctor.nombre }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-primary bg-opacity-10 text-primary">
+                                    {{ areas[doctor.area_id] if doctor.area_id in areas else 'Sin asignar' }}
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <!-- Botón Editar -->
+                                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editarDoctorModal{{ doctor.id }}">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    
+                                    <!-- Botón Eliminar -->
+                                    <form method="post" action="/doctores/eliminar/{{ doctor.id }}" onsubmit="return confirm('¿Confirmar eliminación del Dr. {{ doctor.nombre }}?');">
+                                        <button type="submit" class="btn btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                
+                                <!-- Modal Editar Doctor -->
+                                <div class="modal fade" id="editarDoctorModal{{ doctor.id }}" tabindex="-1" aria-labelledby="editarDoctorLabel{{ doctor.id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form method="post" action="/doctores/editar/{{ doctor.id }}">
+                                                <div class="modal-header bg-primary text-white">
+                                                    <h5 class="modal-title" id="editarDoctorLabel{{ doctor.id }}">
+                                                        <i class="bi bi-person-lines-fill me-1"></i> Editar Doctor
+                                                    </h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label for="nuevoNombre{{ doctor.id }}" class="form-label">Nombre</label>
+                                                        <input type="text" class="form-control" id="nuevoNombre{{ doctor.id }}" name="nuevo_nombre" value="{{ doctor.nombre }}" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="nuevoArea{{ doctor.id }}" class="form-label">Especialidad</label>
+                                                        <select class="form-select" id="nuevoArea{{ doctor.id }}" name="nuevo_area_id" required>
+                                                            {% for id, nombre in areas.items() %}
+                                                            <option value="{{ id }}" {% if doctor.area_id == id %}selected{% endif %}>{{ nombre }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4">
+                                <div class="d-flex flex-column align-items-center text-muted">
+                                    <i class="bi bi-people display-6 mb-2"></i>
+                                    <p class="mb-0">No hay doctores registrados</p>
+                                    <small>Utilice el botón "Nuevo Doctor" para agregar uno</small>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="card-footer bg-white border-0 py-3">
+            <small class="text-muted">Total de doctores: {{ doctores|length }}</small>
+        </div>
+    </div>
+</div>
+
+<style>
+    .avatar-sm {
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .badge {
+        padding: 0.35em 0.65em;
+        font-weight: 500;
+    }
+    
+    .table-hover tbody tr {
+        transition: all 0.2s ease;
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.05) !important;
+    }
+    
+    .btn-group-sm .btn {
+        padding: 0.25rem 0.5rem;
+    }
+</style>
+{% endblock %}
