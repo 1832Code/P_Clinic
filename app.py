@@ -6,8 +6,7 @@ import io
 import matplotlib.pyplot as plt
 
 app = Flask(__name__)
-app.secret_key = 'supersecretkeysupersecretkeysupersecretkeyhellowordtodocodewelcometoday'  # Cambia esto por una clave segura
-
+app.secret_key = 'supersecretkeysupersecretkeysupersecretkeyhellowordtodocodewelcometoday'  
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):

@@ -1,38 +1,192 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Configuración de Usuario</h2>
-<ul class="nav nav-tabs mb-3" id="configTabs" role="tablist">
-  <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="perfil-tab" data-bs-toggle="tab" data-bs-target="#perfil" type="button" role="tab">Perfil</button>
-  </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password" type="button" role="tab">Cambiar contraseña</button>
-  </li>
-</ul>
-<div class="tab-content" id="configTabsContent">
-  <div class="tab-pane fade show active" id="perfil" role="tabpanel">
-    <form method="post">
-      <input type="hidden" name="actualizar_info" value="1">
-      <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre</label>
-        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ session.usuario_nombre }}" required>
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-lg">
+        <div class="card-header bg-gradient-primary text-white py-3">
+          <h2 class="h4 mb-0"><i class="bi bi-gear-fill me-2"></i>Configuración de Usuario</h2>
+        </div>
+        
+        <div class="card-body p-4">
+          <ul class="nav nav-pills mb-4" id="configTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="perfil-tab" data-bs-toggle="pill" data-bs-target="#perfil" type="button" role="tab">
+                <i class="bi bi-person-fill me-2"></i>Perfil
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="password-tab" data-bs-toggle="pill" data-bs-target="#password" type="button" role="tab">
+                <i class="bi bi-shield-lock me-2"></i>Seguridad
+              </button>
+            </li>
+          </ul>
+          
+          <div class="tab-content p-3 border rounded" id="configTabsContent">
+            <div class="tab-pane fade show active" id="perfil" role="tabpanel">
+              <h4 class="mb-4 text-primary"><i class="bi bi-person-badge me-2"></i>Información Personal</h4>
+              <form method="post" class="needs-validation" novalidate>
+                <input type="hidden" name="actualizar_info" value="1">
+                
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" id="nombre" name="nombre" 
+                             value="{{ session.usuario_nombre }}" placeholder="Nombre completo" required>
+                      <label for="nombre">Nombre completo</label>
+                      <div class="invalid-feedback">
+                        Por favor ingrese su nombre
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                      <input type="email" class="form-control" id="email" name="email" 
+                             value="{{ session.usuario_email }}" placeholder="Correo electrónico" required>
+                      <label for="email">Correo electrónico</label>
+                      <div class="invalid-feedback">
+                        Por favor ingrese un correo válido
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="d-flex justify-content-end mt-4">
+                  <button type="submit" class="btn btn-primary px-4 py-2">
+                    <i class="bi bi-save me-2"></i>Guardar cambios
+                  </button>
+                </div>
+              </form>
+            </div>
+            
+            <div class="tab-pane fade" id="password" role="tabpanel">
+              <h4 class="mb-4 text-primary"><i class="bi bi-key-fill me-2"></i>Cambiar Contraseña</h4>
+              <form method="post" class="needs-validation" novalidate>
+                <input type="hidden" name="cambiar_password" value="1">
+                
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                      <input type="password" class="form-control" id="nueva_password" name="nueva_password" 
+                             placeholder="Nueva contraseña" minlength="8" required>
+                      <label for="nueva_password">Nueva contraseña</label>
+                      <div class="invalid-feedback">
+                        Mínimo 8 caracteres
+                      </div>
+                      <div class="form-text text-muted">Usa una combinación de letras, números y símbolos</div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                      <input type="password" class="form-control" id="confirmar_password" name="confirmar_password" 
+                             placeholder="Confirmar contraseña" required>
+                      <label for="confirmar_password">Confirmar contraseña</label>
+                      <div class="invalid-feedback">
+                        Las contraseñas deben coincidir
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="d-flex justify-content-end mt-4">
+                  <button type="submit" class="btn btn-warning px-4 py-2">
+                    <i class="bi bi-arrow-repeat me-2"></i>Actualizar contraseña
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card-footer bg-light text-end py-3">
+          <small class="text-muted">Última actualización: {% if session.last_updated %}{{ session.last_updated }}{% else %}Nunca{% endif %}</small>
+        </div>
       </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="email" value="{{ session.usuario_email }}" required>
-      </div>
-      <button type="submit" class="btn btn-primary">Actualizar información</button>
-    </form>
-  </div>
-  <div class="tab-pane fade" id="password" role="tabpanel">
-    <form method="post">
-      <input type="hidden" name="cambiar_password" value="1">
-      <div class="mb-3">
-        <label for="nueva_password" class="form-label">Nueva contraseña</label>
-        <input type="password" class="form-control" id="nueva_password" name="nueva_password" required>
-      </div>
-      <button type="submit" class="btn btn-warning">Cambiar contraseña</button>
-    </form>
+    </div>
   </div>
 </div>
-{% endblock %} 
+
+<style>
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  .nav-pills .nav-link.active {
+    background-color: #764ba2;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .nav-pills .nav-link {
+    color: #495057;
+    font-weight: 500;
+    border-radius: 0.375rem;
+    transition: all 0.3s ease;
+  }
+  .nav-pills .nav-link:hover {
+    color: #764ba2;
+  }
+  .card {
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  .tab-content {
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+  }
+  .btn-primary {
+    background-color: #764ba2;
+    border-color: #764ba2;
+  }
+  .btn-primary:hover {
+    background-color: #5d3a7e;
+    border-color: #5d3a7e;
+  }
+  .btn-warning {
+    background-color: #ffaa00;
+    border-color: #ffaa00;
+    color: #fff;
+  }
+  .btn-warning:hover {
+    background-color: #e69500;
+    border-color: #e69500;
+  }
+  .form-floating>label {
+    padding: 0.5rem 0.75rem;
+  }
+</style>
+
+<script>
+  // Password confirmation validation
+  document.addEventListener('DOMContentLoaded', function() {
+    const password = document.getElementById('nueva_password');
+    const confirm_password = document.getElementById('confirmar_password');
+    
+    function validatePassword() {
+      if(password.value !== confirm_password.value) {
+        confirm_password.setCustomValidity("Las contraseñas no coinciden");
+      } else {
+        confirm_password.setCustomValidity('');
+      }
+    }
+    
+    password.onchange = validatePassword;
+    confirm_password.onkeyup = validatePassword;
+    
+    // Bootstrap validation
+    (function () {
+      'use strict'
+      var forms = document.querySelectorAll('.needs-validation')
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+          }, false)
+        })
+    })()
+  });
+</script>
+{% endblock %}

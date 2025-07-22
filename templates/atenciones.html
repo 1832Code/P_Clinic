@@ -1,86 +1,260 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2 class="text-slate-900">Atenciones</h2>
-<form method="post" class="row g-3 mb-4">
-  <div class="col-auto">
-    <select class="form-select" name="paciente_id" required>
-      <option value="">Seleccione paciente</option>
-      {% for id, nombre in pacientes.items() %}
-      <option value="{{ id }}">{{ nombre }}</option>
-      {% endfor %}
-    </select>
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0 text-slate-900 fw-bold"><i class="bi bi-clipboard2-pulse-fill me-2"></i>Gestión de Atenciones Médicas</h2>
+    <div>
+      <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#filtrosModal">
+        <i class="bi bi-funnel-fill me-1"></i>Filtrar
+      </button>
+      <button class="btn btn-primary">
+        <i class="bi bi-plus-circle-fill me-1"></i>Nueva Atención
+      </button>
+    </div>
   </div>
-  <div class="col-auto">
-    <select class="form-select" name="doctor_id" required>
-      <option value="">Seleccione doctor</option>
-      {% for id, nombre in doctores.items() %}
-      <option value="{{ id }}">{{ nombre }}</option>
-      {% endfor %}
-    </select>
+
+  <!-- Registration Card -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-primary text-white py-3">
+      <h5 class="mb-0"><i class="bi bi-file-earmark-medical-fill me-2"></i>Registrar Nueva Atención</h5>
+    </div>
+    <div class="card-body">
+      <form method="post" class="row g-3 align-items-end needs-validation" novalidate>
+        <div class="col-md-4">
+          <label for="pacienteSelect" class="form-label fw-medium">Paciente</label>
+          <select class="form-select form-select-lg" id="pacienteSelect" name="paciente_id" required>
+            <option value="" selected disabled>Seleccione paciente</option>
+            {% for id, nombre in pacientes.items() %}
+            <option value="{{ id }}">{{ nombre }}</option>
+            {% endfor %}
+          </select>
+          <div class="invalid-feedback">
+            Por favor seleccione un paciente
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <label for="doctorSelect" class="form-label fw-medium">Profesional</label>
+          <select class="form-select form-select-lg" id="doctorSelect" name="doctor_id" required>
+            <option value="" selected disabled>Seleccione doctor</option>
+            {% for id, nombre in doctores.items() %}
+            <option value="{{ id }}">{{ nombre }}</option>
+            {% endfor %}
+          </select>
+          <div class="invalid-feedback">
+            Por favor seleccione un doctor
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <label for="tiempoAtencion" class="form-label fw-medium">Duración (min)</label>
+          <div class="input-group">
+            <input type="number" class="form-control form-control-lg" id="tiempoAtencion" 
+                   name="tiempo_atencion" placeholder="Ej: 30" min="1" required>
+            <span class="input-group-text">min</span>
+            <div class="invalid-feedback">
+              Ingrese un tiempo válido
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-2 d-grid">
+          <button type="submit" class="btn btn-success btn-lg">
+            <i class="bi bi-check-circle-fill me-2"></i>Registrar
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-  <div class="col-auto">
-    <input type="number" class="form-control" name="tiempo_atencion" placeholder="Tiempo de atención" min="0" required>
-  </div>
-  <div class="col-auto">
-    <button type="submit" class="btn btn-success">Registrar Atención</button>
-  </div>
-</form>
-<table class="table table-striped mt-3">
-    <thead>
-        <tr><th>ID</th><th>Paciente</th><th>Doctor</th><th>Tiempo de Atención</th><th>Acciones</th></tr>
-    </thead>
-    <tbody>
-        {% for atencion in atenciones %}
-        <tr>
-            <td>{{ atencion.id }}</td>
-            <td>{{ pacientes[atencion.paciente_id] if atencion.paciente_id in pacientes else 'Desconocido' }}</td>
-            <td>{{ doctores[atencion.doctor_id] if atencion.doctor_id in doctores else 'Desconocido' }}</td>
-            <td>{{ atencion.tiempo_atencion }}</td>
-            <td>
-                <!-- Botón Editar (abre modal) -->
-                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editarAtencionModal{{ atencion.id }}">Editar</button>
-                <!-- Modal Editar -->
-                <div class="modal fade" id="editarAtencionModal{{ atencion.id }}" tabindex="-1" aria-labelledby="editarAtencionLabel{{ atencion.id }}" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <form method="post" action="/atenciones/editar/{{ atencion.id }}">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="editarAtencionLabel{{ atencion.id }}">Editar Atención</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          <select class="form-select mb-2" name="nuevo_paciente_id" required>
-                            {% for id, nombre in pacientes.items() %}
-                            <option value="{{ id }}" {% if atencion.paciente_id == id %}selected{% endif %}>{{ nombre }}</option>
-                            {% endfor %}
-                          </select>
-                          <select class="form-select mb-2" name="nuevo_doctor_id" required>
-                            {% for id, nombre in doctores.items() %}
-                            <option value="{{ id }}" {% if atencion.doctor_id == id %}selected{% endif %}>{{ nombre }}</option>
-                            {% endfor %}
-                          </select>
-                          <input type="number" class="form-control mb-2" name="nuevo_tiempo_atencion" value="{{ atencion.tiempo_atencion }}" min="0" required>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                        </div>
-                      </form>
-                    </div>
+
+  <!-- Attention Records Table -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3">
+      <h5 class="mb-0"><i class="bi bi-list-check me-2"></i>Registro de Atenciones</h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light">
+            <tr>
+              <th class="ps-4">ID</th>
+              <th>Paciente</th>
+              <th>Profesional</th>
+              <th class="text-center">Duración</th>
+              <th class="text-center">Fecha</th>
+              <th class="text-end pe-4">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for atencion in atenciones %}
+            <tr>
+              <td class="ps-4 fw-semibold text-primary">#{{ atencion.id }}</td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="icon-shape bg-primary bg-opacity-10 text-primary rounded-circle me-3">
+                    <i class="bi bi-person-fill"></i>
+                  </div>
+                  <div>
+                    <h6 class="mb-0">{{ pacientes[atencion.paciente_id] if atencion.paciente_id in pacientes else 'Desconocido' }}</h6>
+                    <small class="text-muted">Paciente</small>
                   </div>
                 </div>
-                <!-- Botón Eliminar (con confirmación) -->
-                <form method="post" action="/atenciones/eliminar/{{ atencion.id }}" style="display:inline-block;" onsubmit="return confirm('¿Seguro que desea eliminar esta atención?');">
-                  <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="icon-shape bg-info bg-opacity-10 text-info rounded-circle me-3">
+                    <i class="bi bi-heart-pulse"></i>
+                  </div>
+                  <div>
+                    <h6 class="mb-0">{{ doctores[atencion.doctor_id] if atencion.doctor_id in doctores else 'Desconocido' }}</h6>
+                    <small class="text-muted">Profesional</small>
+                  </div>
+                </div>
+              </td>
+              <td class="text-center">
+                <span class="badge bg-primary bg-opacity-10 text-primary py-2 px-3">
+                  <i class="bi bi-clock-history me-1"></i>{{ atencion.tiempo_atencion }} min
+                </span>
+              </td>
+              <td class="text-center text-muted">
+                {{ atencion.fecha_registro.strftime('%d/%m/%Y') if atencion.fecha_registro else '--/--/----' }}
+              </td>
+              <td class="pe-4">
+                <div class="d-flex justify-content-end">
+                  <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#editarAtencionModal{{ atencion.id }}">
+                    <i class="bi bi-pencil-fill"></i> Editar
+                  </button>
+                  <form method="post" action="/atenciones/eliminar/{{ atencion.id }}" onsubmit="return confirm('¿Confirmar eliminación de esta atención?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                      <i class="bi bi-trash-fill"></i> Eliminar
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editarAtencionModal{{ atencion.id }}" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Editar Atención #{{ atencion.id }}</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <form method="post" action="/atenciones/editar/{{ atencion.id }}">
+                    <div class="modal-body">
+                      <div class="mb-3">
+                        <label class="form-label fw-medium">Paciente</label>
+                        <select class="form-select" name="nuevo_paciente_id" required>
+                          {% for id, nombre in pacientes.items() %}
+                          <option value="{{ id }}" {% if atencion.paciente_id == id %}selected{% endif %}>{{ nombre }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label fw-medium">Profesional</label>
+                        <select class="form-select" name="nuevo_doctor_id" required>
+                          {% for id, nombre in doctores.items() %}
+                          <option value="{{ id }}" {% if atencion.doctor_id == id %}selected{% endif %}>{{ nombre }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label fw-medium">Duración (minutos)</label>
+                        <input type="number" class="form-control" name="nuevo_tiempo_atencion" value="{{ atencion.tiempo_atencion }}" min="1" required>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer bg-white py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="text-muted">
+          Mostrando {{ atenciones|length }} registros
+        </div>
+        <nav aria-label="Page navigation">
+          <ul class="pagination mb-0">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">Siguiente</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
-    h2{
-        color: black;
-    }
+  .card {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  .card-header {
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 1rem 1.5rem;
+  }
+  .table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+  }
+  .icon-shape {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .form-select-lg, .form-control-lg {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+  .btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+  .badge {
+    font-weight: 500;
+  }
+  .modal-header {
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+  }
 </style>
-{% endblock %} 
+
+<script>
+  // Form validation
+  (function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+  })()
+</script>
+{% endblock %}

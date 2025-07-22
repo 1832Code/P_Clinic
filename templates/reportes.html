@@ -1,54 +1,204 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Reportes y Estadísticas</h2>
-<div class="row mb-4">
-  <div class="col-md-4">
-    <div class="card text-center">
-      <div class="card-body">
-        <h5 class="card-title">Total de Atenciones</h5>
-        <p class="display-5">{{ total_atenciones }}</p>
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0"><i class="bi bi-bar-chart-line-fill me-2"></i>Reportes y Estadísticas</h2>
+    <div>
+      <button class="btn btn-outline-primary me-2"><i class="bi bi-download me-1"></i>Exportar</button>
+      <div class="btn-group">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          <i class="bi bi-calendar me-1"></i>Rango de fechas
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="#">Hoy</a></li>
+          <li><a class="dropdown-item" href="#">Esta semana</a></li>
+          <li><a class="dropdown-item" href="#">Este mes</a></li>
+          <li><a class="dropdown-item" href="#">Personalizado</a></li>
+        </ul>
       </div>
     </div>
   </div>
-  <div class="col-md-4">
-    <div class="card text-center">
-      <div class="card-body">
-        <h5 class="card-title">Tiempo de Espera Promedio</h5>
-        <p class="display-5">{{ tiempo_espera_prom }} <span class="fs-6">min</span></p>
+
+  <!-- Summary Cards -->
+  <div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-uppercase text-muted mb-2">Total Atenciones</h6>
+              <h2 class="mb-0">{{ total_atenciones }}</h2>
+            </div>
+            <div class="icon-shape icon-lg bg-primary bg-opacity-10 text-primary rounded-3">
+              <i class="bi bi-people-fill fs-3"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <span class="text-success fw-bold"><i class="bi bi-arrow-up"></i> 12.5%</span>
+            <span class="text-muted ms-2">vs último mes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-uppercase text-muted mb-2">Tiempo Espera Prom.</h6>
+              <h2 class="mb-0">{{ tiempo_espera_prom }} <span class="fs-5">min</span></h2>
+            </div>
+            <div class="icon-shape icon-lg bg-warning bg-opacity-10 text-warning rounded-3">
+              <i class="bi bi-clock-history fs-3"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <span class="text-danger fw-bold"><i class="bi bi-arrow-down"></i> 8.3%</span>
+            <span class="text-muted ms-2">vs último mes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-uppercase text-muted mb-2">Pacientes Prioritarios</h6>
+              <h2 class="mb-0">24%</h2>
+            </div>
+            <div class="icon-shape icon-lg bg-danger bg-opacity-10 text-danger rounded-3">
+              <i class="bi bi-exclamation-triangle-fill fs-3"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <span class="text-success fw-bold"><i class="bi bi-arrow-up"></i> 3.2%</span>
+            <span class="text-muted ms-2">vs último mes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-uppercase text-muted mb-2">Satisfacción</h6>
+              <h2 class="mb-0">92%</h2>
+            </div>
+            <div class="icon-shape icon-lg bg-success bg-opacity-10 text-success rounded-3">
+              <i class="bi bi-emoji-smile-fill fs-3"></i>
+            </div>
+          </div>
+          <div class="mt-3">
+            <span class="text-success fw-bold"><i class="bi bi-arrow-up"></i> 1.8%</span>
+            <span class="text-muted ms-2">vs último mes</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-md-6 mb-4">
-    <h5>Pacientes atendidos por área</h5>
-    <img src="{{ url_for('grafico_atendidos_por_area') }}" class="img-fluid border rounded">
+
+  <!-- Charts Section -->
+  <div class="row">
+    <div class="col-lg-6 mb-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white border-bottom">
+          <h5 class="mb-0"><i class="bi bi-building me-2"></i>Pacientes atendidos por área</h5>
+        </div>
+        <div class="card-body">
+          <img src="{{ url_for('grafico_atendidos_por_area') }}" class="img-fluid w-100 rounded">
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 mb-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white border-bottom">
+          <h5 class="mb-0"><i class="bi bi-flag-fill me-2"></i>Distribución de prioridades</h5>
+        </div>
+        <div class="card-body">
+          <img src="{{ url_for('grafico_prioridades') }}" class="img-fluid w-100 rounded">
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="col-md-6 mb-4">
-    <h5>Distribución de prioridades de pacientes</h5>
-    <img src="{{ url_for('grafico_prioridades') }}" class="img-fluid border rounded">
+
+  <div class="row">
+    <div class="col-lg-6 mb-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white border-bottom">
+          <h5 class="mb-0"><i class="bi bi-person-badge-fill me-2"></i>Atenciones por doctor</h5>
+        </div>
+        <div class="card-body">
+          <img src="{{ url_for('grafico_atenciones_por_doctor') }}" class="img-fluid w-100 rounded">
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 mb-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white border-bottom">
+          <h5 class="mb-0"><i class="bi bi-clipboard2-pulse-fill me-2"></i>Pacientes por estado</h5>
+        </div>
+        <div class="card-body">
+          <img src="{{ url_for('grafico_pacientes_estado') }}" class="img-fluid w-100 rounded">
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-md-6 mb-4">
-    <h5>Atenciones por doctor</h5>
-    <img src="{{ url_for('grafico_atenciones_por_doctor') }}" class="img-fluid border rounded">
-  </div>
-  <div class="col-md-6 mb-4">
-    <h5>Pacientes por estado de atención</h5>
-    <img src="{{ url_for('grafico_pacientes_estado') }}" class="img-fluid border rounded">
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-6 mb-4">
-    <h5>Pacientes por área</h5>
-    <img src="{{ url_for('grafico_pacientes_por_area') }}" class="img-fluid border rounded">
+
+  <div class="row">
+    <div class="col-lg-6 mb-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white border-bottom">
+          <h5 class="mb-0"><i class="bi bi-heart-pulse-fill me-2"></i>Pacientes por área</h5>
+        </div>
+        <div class="card-body">
+          <img src="{{ url_for('grafico_pacientes_por_area') }}" class="img-fluid w-100 rounded">
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 mb-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white border-bottom">
+          <h5 class="mb-0"><i class="bi bi-calendar-week-fill me-2"></i>Tendencia mensual</h5>
+        </div>
+        <div class="card-body">
+          <div class="text-center py-5">
+            <img src="" class="img-fluid w-100 rounded" style="max-height: 250px;">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <style>
-    h2{
-        color: black;
-    }
+  .card {
+    border-radius: 0.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+  }
+  .icon-shape {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+  }
+  .card-header {
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+    padding: 1rem 1.5rem;
+  }
+  h2 {
+    color: #2c3e50;
+    font-weight: 600;
+  }
+  h5 {
+    color: #34495e;
+    font-weight: 500;
+  }
 </style>
-{% endblock %} 
+{% endblock %}
